@@ -13,7 +13,7 @@ import Loading from 'components/shared-components/Loading';
 
 
 const themes = {
-  dark: `${process.env.PUBLIC_URL}/css/dark-theme.css`,
+  dark:`${process.env.PUBLIC_URL}/css/dark-theme.css`,
   light: `${process.env.PUBLIC_URL}/css/light-theme.css`,
 };
 
