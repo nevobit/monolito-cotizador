@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Table, Input, Button, Popconfirm, message } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  DownloadOutlined,
+} from "@ant-design/icons";
 import { APP_PREFIX_PATH, API_BASE_URL } from "configs/AppConfig";
 import axios from "axios";
 import Loading from "components/shared-components/Loading";
@@ -8,7 +12,7 @@ import searchTextInArray from "utils/search";
 import antdTableSorter from "utils/sort";
 import ExportExcel from "../../../utils/ExportExcel";
 
-const Actions = (_id, deleteCustomer, editCustomer) => {
+const Actions = ({ _id, deleteCustomer, editCustomer, nit }) => {
   return (
     <div>
       <EditOutlined
@@ -18,13 +22,22 @@ const Actions = (_id, deleteCustomer, editCustomer) => {
       <Popconfirm title="Sure to delete?" onConfirm={() => deleteCustomer(_id)}>
         <DeleteOutlined style={{ fontSize: "25px" }} />
       </Popconfirm>
+      <a href={nit} target="_blank" rel="noopener noreferrer">
+        <DownloadOutlined
+          style={{ fontSize: "25px", marginLeft: "15px", color: "black" }}
+        />
+      </a>
     </div>
   );
 };
+
 const Customers = ({ history }) => {
   const [loading, setLoading] = useState(true);
   const [customers, setCustomers] = useState([]);
   const [allCustomers, setAllCustomers] = useState([]);
+  const [urlPDF, setUrlPDF] = useState("");
+
+  console.log(allCustomers);
 
   useEffect(() => {
     const init = async () => {
@@ -39,8 +52,9 @@ const Customers = ({ history }) => {
           },
         };
         const res = await axios.request(options);
-        setCustomers(res.data);
-        setAllCustomers(res.data);
+        const reversedData = res.data.reverse();
+        setCustomers(reversedData);
+        setAllCustomers(reversedData);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -57,7 +71,10 @@ const Customers = ({ history }) => {
   };
 
   const deleteCustomer = async (_id) => {
-    setCustomers(customers.filter((p) => p._id !== _id));
+    const filteredCustomers = customers.filter((p) => p._id !== _id).reverse();
+    setCustomers(filteredCustomers);
+    setAllCustomers(filteredCustomers);
+
     try {
       const jwt = localStorage.getItem("jwt");
       const options = {
@@ -106,7 +123,8 @@ const Customers = ({ history }) => {
       title: "Acciones",
       dataIndex: "_id",
       key: "_id",
-      render: (_id) => Actions(_id, deleteCustomer, editCustomer),
+      render: (_id, record) =>
+      Actions({ _id, deleteCustomer, editCustomer, nit: record.nit }),
     },
   ];
 
@@ -125,8 +143,6 @@ const Customers = ({ history }) => {
   };
 
   if (loading) return <Loading cover="content" />;
-
-  console.log("CLIENTES", Object.keys(allCustomers[0]));
 
   return (
     <div>
@@ -165,5 +181,3 @@ const Customers = ({ history }) => {
 };
 
 export default Customers;
-
-

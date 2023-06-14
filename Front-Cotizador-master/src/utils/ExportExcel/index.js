@@ -5,6 +5,10 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
 const ExportExcel = ({ items }) => {
+  if (items === undefined || items === null || items.length === 0) {
+    return null; // O mostrar un mensaje de error o un componente alternativo
+  }
+
   const headers = [];
   headers.push(...Object.keys(items[0]));
   for (const key in items[0]) {

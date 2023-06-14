@@ -361,8 +361,9 @@ const Quotes = ({ history }) => {
           },
         };
         const res = await axios.request(options);
-        setQuotes(res.data);
-        setAllQuotes(res.data);
+        const reversedData = res.data.reverse();
+        setQuotes(reversedData);
+        setAllQuotes(reversedData);
         setLoading(false);
       } catch (error) {
         console.error(error);

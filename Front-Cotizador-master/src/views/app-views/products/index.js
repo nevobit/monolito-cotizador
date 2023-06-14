@@ -40,8 +40,9 @@ const Products = ({ history }) => {
           },
         };
         let res = await axios.request(options);
-        setProducts(res.data);
-        setAllProducts(res.data);
+        const reversedData = res.data.reverse();
+        setProducts(reversedData);
+        setAllProducts(reversedData);
       } catch (error) {
         console.error(error);
       }
