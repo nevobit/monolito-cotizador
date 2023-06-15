@@ -12,7 +12,7 @@ const createCustomer = async (req, res) => {
     await newCustomer.save();
     return res.status(200).json({ message: "Customer created!" });
   } catch (error) {
-    return res.status(400).json({ message: "Something went wrong" });
+    return res.status(400).json({ message: `${error}` });
   }
 };
 
