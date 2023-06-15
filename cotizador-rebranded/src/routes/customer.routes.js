@@ -74,7 +74,7 @@ const { verifyToken } = require('../middlewares/authJWT')
  *      500:
  *        description: Server error
  */
-router.post("/", [verifyToken, customerCtrl.createCustomer])
+router.post("/", [customerCtrl.createCustomer])
 
 /**
  * @swagger
