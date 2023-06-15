@@ -5,7 +5,7 @@ const Customer = require("../models/Customer");
  * @returns {Object} Success message or error message
  */
 const createCustomer = async (req, res) => {
-  const userId = "624ee7b57712d5f80fac7046";
+  const userId = "627c513b3a242824b5ec6c78";
 
   try {
     const newCustomer = new Customer({ ...req.body, userId });
@@ -21,7 +21,7 @@ const createCustomer = async (req, res) => {
  * @returns {Array} customer array
  */
 const getCustomersByUserId = async (req, res) => {
-  const userId = "624ee7b57712d5f80fac7046";
+  const userId = "627c513b3a242824b5ec6c78";
   try {
     const customers = await Customer.find({ userId }).exec();
     return res.json(customers);
@@ -35,7 +35,7 @@ const getCustomersByUserId = async (req, res) => {
  * @returns {Array} customer array
  */
 const getCustomerById = async (req, res) => {
-  const userId = "624ee7b57712d5f80fac7046";
+  const userId = "627c513b3a242824b5ec6c78";
   const { id } = req.params;
 
   try {
