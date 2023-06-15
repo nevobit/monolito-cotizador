@@ -97,7 +97,7 @@ router.post("/", [verifyToken, customerCtrl.createCustomer])
  *      500:
  *        description: Server error
  */
-router.get("/", [ customerCtrl.getCustomersByUserId])
+router.get("/", [customerCtrl.getCustomersByUserId])
 
 /**
  * @swagger
@@ -125,7 +125,7 @@ router.get("/", [ customerCtrl.getCustomersByUserId])
  *      500:
  *        description: Server error
  */
-router.get("/:id", [customerCtrl.getCustomerById])
+router.get("/:id", [verifyToken, customerCtrl.getCustomerById])
 
 /**
  * @swagger
