@@ -3,7 +3,6 @@ import { Form, Input, InputNumber, Button, Card, message } from "antd";
 import { APP_PREFIX_PATH, API_BASE_URL } from "configs/AppConfig";
 import axios from "axios";
 
-
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 14 },

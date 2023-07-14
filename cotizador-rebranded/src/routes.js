@@ -6,6 +6,7 @@ const image = require('./routes/image.routes')
 const quote = require('./routes/quote.routes')
 const discount = require('./routes/discount.routes')
 const usbdiscount = require('./routes/usbDiscount.routes')
+const mailer = require("./routes/mailer.route")
 
 const routes = (app) => {
   app.use('/user', user)
@@ -16,6 +17,7 @@ const routes = (app) => {
   app.use('/quote', quote)
   app.use('/discount', discount)
   app.use('/usbdiscount', usbdiscount)
+  app.use('/mailer', mailer)
 }
 
 module.exports = routes;
