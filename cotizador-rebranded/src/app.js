@@ -7,6 +7,7 @@ const routes = require('./routes')
 const swaggerUI = require('swagger-ui-express')
 const swaggerJsDoc = require('swagger-jsdoc')
 const fs = require('fs')
+const path = require('path')
 
 require('./utils/updateProducts')
 require('./utils/database')
