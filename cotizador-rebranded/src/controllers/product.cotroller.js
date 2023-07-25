@@ -72,7 +72,7 @@ const getProducts = async (req, res) => {
     const products = await Product.find()
     return res.status(200).json(products)
   } catch (error) {
-    return res.status(400).json({ message: 'Something went wrong' })
+    return res.status(400).json({ message: error })
   }
 }
 
