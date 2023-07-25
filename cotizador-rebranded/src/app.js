@@ -16,7 +16,7 @@ const app = express()
 
 const server = http.createServer(app)
 
-const publicFolderPath = path.join(__dirname, 'image');
+const publicFolderPath = path.join(__dirname, '../image');
 
 fs.mkdir('./uploads', (err) => console.log(err))
 
