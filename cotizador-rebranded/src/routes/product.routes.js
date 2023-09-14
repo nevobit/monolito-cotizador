@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const productCtrl = require('../controllers/product.cotroller')
-const { verifyToken } = require('../middlewares/authJWT')
+const { verifyToken } = require('../middlewares/authJWT');
+const updateProducts = require('../utils/updateProducts');
 
 /**
  * @swagger
@@ -54,7 +55,7 @@ const { verifyToken } = require('../middlewares/authJWT')
  *      500:
  *        description: Server error
  */
-router.get("/", [verifyToken, productCtrl.getProducts])
+router.get("/", [productCtrl.getProducts])
 
 /**
  * @swagger
@@ -122,7 +123,15 @@ router.get("/", [verifyToken, productCtrl.getProducts])
 *      500:
 *        description: Server error
 */
-router.get("/update", productCtrl.updateProducts)
+router.get("/update", (req, res) => {
+    console.log("Hola mundo")
+    res.status(200).send({hola: "MUndo"})
+})
+
+router.get("/updating", (req, res) => {
+    console.log("Hola mundo")
+    res.status(200).send({hola: "MUndo"})
+})
 
 /**
  * @swagger

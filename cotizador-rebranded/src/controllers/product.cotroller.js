@@ -4,6 +4,8 @@ const HttpsProxyAgent = require("https-proxy-agent")
 const _ = require('lodash')
 
 const updateProducts = async (req, res) => {
+
+  console.log("Updating Products")
   try {
     //const httpsAgent = new HttpsProxyAgent({ host: '154.9.32.21', port: '8800' })
     const categories = (await axios.get('https://api.cataprom.com/rest/categorias/')).data.resultado
@@ -19,6 +21,8 @@ const updateProducts = async (req, res) => {
       }
       await addProducts()
     }
+  console.log("Updating Products")
+
     let finalListOfProducts = products.map((p) => {
       let prices = []
       for (let i = 1; i <= 5; i++) {
@@ -40,6 +44,8 @@ const updateProducts = async (req, res) => {
       }
       return product
     })
+  console.log("Updating Products")
+
     finalListOfProducts = _.uniqBy(finalListOfProducts, (p) => p.sku)
     await Product.deleteMany({})
     const result = await Product.insertMany(finalListOfProducts)
@@ -69,7 +75,7 @@ const createProduct = async (req, res) => {
  */
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find()
+    const products = await Product.find({sku: "VENTURA CE"})
     return res.status(200).json(products)
   } catch (error) {
     return res.status(400).json({ message: error })

@@ -50,8 +50,12 @@ const updateProducts = async () => {
   } catch (error) {
     console.log(error);
   }
+
+  return true;
 }
 
 const task = cron.schedule('0 0 * * *', updateProducts)
 
 module.exports = task
+
+module.exports = updateProducts;
