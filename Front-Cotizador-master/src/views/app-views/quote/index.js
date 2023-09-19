@@ -482,7 +482,7 @@ const Quotes = ({ history }) => {
       setQuotes(
         searchTextInArray(
           allQuotes,
-          ["quoteNumber", "customer.name", "seller"],
+          ["quoteNumber", "customer.businessName", "seller"],
           toSearch
         )
       );

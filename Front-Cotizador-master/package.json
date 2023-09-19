@@ -13,6 +13,7 @@
     "axios": "^0.21.4",
     "cloudinary": "^1.40.0",
     "cloudinary-react": "^1.8.1",
+    "concurrently": "^8.2.1",
     "file-saver": "^2.0.5",
     "firebase": "^8.10.1",
     "fontkit": "^2.0.2",
@@ -42,8 +43,6 @@
     "redux-saga": "^1.2.3",
     "xlsx": "^0.18.5"
   },
-
-
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
