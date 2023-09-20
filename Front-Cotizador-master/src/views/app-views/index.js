@@ -38,7 +38,9 @@ export const AppViews = () => {
         <Route path={`${APP_PREFIX_PATH}/products`} component={lazy(() => import(`./products`))} />
         <Route path={`${APP_PREFIX_PATH}/addproduct`} component={lazy(() => import(`./products/AddProduct`))} />
         <Route path={`${APP_PREFIX_PATH}/editproduct/:productid`} component={lazy(() => import(`./products/EditProduct`))} />
+        <Route path={`${APP_PREFIX_PATH}/guide`} component={lazy(() => import(`./guide`))} />
         <Redirect from={`${APP_PREFIX_PATH}`} to={`${APP_PREFIX_PATH}/customers`} />
+
       </Switch>
     </Suspense>
   )
