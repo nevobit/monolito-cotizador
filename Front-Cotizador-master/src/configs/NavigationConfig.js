@@ -6,159 +6,168 @@ import {
   PercentageOutlined,
   EditOutlined,
   RocketOutlined,
-  UsbOutlined
-} from '@ant-design/icons';
-import { APP_PREFIX_PATH } from 'configs/AppConfig'
+  UsbOutlined,
+} from "@ant-design/icons";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
 const navigationConfig = (user) => {
-  let menu = []
+  let menu = [];
 
-  const customerMenu =
-  {
+  const customerMenu = {
     key: `customers`,
     path: `customers`,
-    title: 'Clientes',
+    title: "Clientes",
     icon: TeamOutlined,
     submenu: [
       {
         key: `${APP_PREFIX_PATH}/customers`,
         path: `${APP_PREFIX_PATH}/customers`,
-        title: 'Clientes',
+        title: "Clientes",
         icon: TeamOutlined,
-        submenu: []
+        submenu: [],
       },
       {
         key: `${APP_PREFIX_PATH}/addcustomer`,
         path: `${APP_PREFIX_PATH}/addcustomer`,
-        title: 'Crear cliente',
+        title: "Crear cliente",
         icon: PlusOutlined,
-        submenu: []
-      }
-    ]
-  }
-  const quoteMenu =
-  {
+        submenu: [],
+      },
+    ],
+  };
+  const quoteMenu = {
     key: `Cotizaciones`,
-    title: 'Cotizaciones',
+    title: "Cotizaciones",
     icon: FileOutlined,
     submenu: [
       {
         key: `${APP_PREFIX_PATH}/quotes`,
         path: `${APP_PREFIX_PATH}/quotes`,
-        title: 'Cotizaciones',
+        title: "Cotizaciones",
         icon: FileOutlined,
-        submenu: []
+        submenu: [],
       },
       {
         key: `${APP_PREFIX_PATH}/addquote`,
         path: `${APP_PREFIX_PATH}/addquote`,
-        title: 'Crear Cotizacion',
+        title: "Crear Cotizacion",
         icon: PlusOutlined,
-        submenu: []
-      }
-    ]
-  }
+        submenu: [],
+      },
+    ],
+  };
 
-  const markingsMenu =
-  {
+  const guideMenu = {
+    key: `Guia`,
+    title: "Guia",
+    icon: FileOutlined,
+    submenu: [
+      {
+        key: `${APP_PREFIX_PATH}/addhuide`,
+        path: `https://xppublicitarios-mu.vercel.app/guide`,
+        title: "Generar guia",
+        icon: PlusOutlined,
+      },
+    ],
+  };
+
+  const markingsMenu = {
     key: `Marcaciones`,
-    title: 'Marcaciones',
+    title: "Marcaciones",
     icon: BgColorsOutlined,
     submenu: [
       {
         key: `${APP_PREFIX_PATH}/markings`,
         path: `${APP_PREFIX_PATH}/markings`,
-        title: 'Marcaciones',
+        title: "Marcaciones",
         icon: BgColorsOutlined,
-        submenu: []
+        submenu: [],
       },
       {
         key: `${APP_PREFIX_PATH}/addmarking`,
         path: `${APP_PREFIX_PATH}/addmarking`,
-        title: 'Crear Marcacion',
+        title: "Crear Marcacion",
         icon: PlusOutlined,
-        submenu: []
-      }
-    ]
-  }
+        submenu: [],
+      },
+    ],
+  };
 
-  const discountMenu =
-  {
+  const discountMenu = {
     key: `Descuentos`,
-    title: 'Descuentos',
+    title: "Descuentos",
     icon: PercentageOutlined,
     submenu: [
       {
         key: `${APP_PREFIX_PATH}/discount`,
         path: `${APP_PREFIX_PATH}/discount`,
-        title: 'Descuentos',
+        title: "Descuentos",
         icon: PercentageOutlined,
-        submenu: []
+        submenu: [],
       },
       {
         key: `${APP_PREFIX_PATH}/editdiscount`,
         path: `${APP_PREFIX_PATH}/editdiscount`,
-        title: 'Editar Descuento',
+        title: "Editar Descuento",
         icon: EditOutlined,
-        submenu: []
-      }
-    ]
-  }
+        submenu: [],
+      },
+    ],
+  };
 
-  const usbDiscountMenu =
-  {
+  const usbDiscountMenu = {
     key: `Descuentos USB`,
-    title: 'Descuentos USB',
+    title: "Descuentos USB",
     icon: UsbOutlined,
     submenu: [
       {
         key: `${APP_PREFIX_PATH}/usbdiscount`,
         path: `${APP_PREFIX_PATH}/usbdiscount`,
-        title: 'Descuentos',
+        title: "Descuentos",
         icon: UsbOutlined,
-        submenu: []
+        submenu: [],
       },
       {
         key: `${APP_PREFIX_PATH}/editusbdiscount`,
         path: `${APP_PREFIX_PATH}/editusbdiscount`,
-        title: 'Editar Descuento',
+        title: "Editar Descuento",
         icon: EditOutlined,
-        submenu: []
-      }
-    ]
-  }
+        submenu: [],
+      },
+    ],
+  };
 
-  const productsMenu =
-  {
+  const productsMenu = {
     key: `${APP_PREFIX_PATH}/products`,
-    title: 'Productos',
+    title: "Productos",
     icon: RocketOutlined,
     submenu: [
       {
         key: `${APP_PREFIX_PATH}/products`,
         path: `${APP_PREFIX_PATH}/products`,
-        title: 'Productos',
+        title: "Productos",
         icon: RocketOutlined,
-        submenu: []
+        submenu: [],
       },
       {
         key: `${APP_PREFIX_PATH}/addproduct`,
         path: `${APP_PREFIX_PATH}/addproduct`,
-        title: 'Crear Producto',
+        title: "Crear Producto",
         icon: PlusOutlined,
-        submenu: []
-      }
-    ]
-  }
+        submenu: [],
+      },
+    ],
+  };
 
-  menu.push(customerMenu)
-  menu.push(quoteMenu)
-  menu.push(markingsMenu)
-  menu.push(discountMenu)
-  menu.push(usbDiscountMenu)
-  menu.push(productsMenu)
+  menu.push(customerMenu);
+  menu.push(quoteMenu);
+  menu.push(markingsMenu);
+  menu.push(guideMenu);
+  menu.push(discountMenu);
+  menu.push(usbDiscountMenu);
+  menu.push(productsMenu);
 
-  return menu
-}
+  return menu;
+};
 
 export default navigationConfig;
