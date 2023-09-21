@@ -57,20 +57,6 @@ const navigationConfig = (user) => {
     ],
   };
 
-  const guideMenu = {
-    key: `Guia`,
-    title: "Guia",
-    icon: FileOutlined,
-    submenu: [
-      {
-        key: `${APP_PREFIX_PATH}/addhuide`,
-        path: `https://xppublicitarios-mu.vercel.app/guide`,
-        title: "Generar guia",
-        icon: PlusOutlined,
-      },
-    ],
-  };
-
   const markingsMenu = {
     key: `Marcaciones`,
     title: "Marcaciones",
@@ -162,7 +148,6 @@ const navigationConfig = (user) => {
   menu.push(customerMenu);
   menu.push(quoteMenu);
   menu.push(markingsMenu);
-  menu.push(guideMenu);
   menu.push(discountMenu);
   menu.push(usbDiscountMenu);
   menu.push(productsMenu);
