@@ -7,7 +7,7 @@ import { UserContext } from "contexts/UserContext";
 import { connect } from "react-redux";
 import { SIDE_NAV_LIGHT, NAV_TYPE_SIDE } from "constants/ThemeConstant";
 import { onMobileNavToggle } from "redux/actions/Theme";
-import { useLocation } from 'react-router-dom'
+import { useLocation } from "react-router-dom";
 const { SubMenu } = Menu;
 
 const setDefaultOpen = (key) => {
@@ -25,10 +25,10 @@ const setDefaultOpen = (key) => {
 };
 
 const SideNavContent = (props) => {
-  const { user } = useContext(UserContext)
+  const { user } = useContext(UserContext);
   const { sideNavTheme, routeInfo, hideGroupTitle } = props;
-  const location = useLocation()
-  const navigationMenu = navigationConfig(user)
+  const location = useLocation();
+  const navigationMenu = navigationConfig(user);
 
   return (
     <Menu
@@ -64,10 +64,9 @@ const SideNavContent = (props) => {
                 >
                   {subMenuFirst.submenu.map((subMenuSecond) => (
                     <Menu.Item key={subMenuSecond.key}>
-                      <span>
-                        {subMenuSecond.title}
-                      </span>
-                      <Link to={subMenuSecond.path} />
+                      <span>{subMenuSecond.title}</span>
+
+                      <Link to={subMenuSecond.path}>{subMenuSecond.title}</Link>
                     </Menu.Item>
                   ))}
                 </SubMenu>
@@ -83,21 +82,23 @@ const SideNavContent = (props) => {
             )}
           </SubMenu>
         ) : (
-          <Menu.Item key={menu.key}>
-            {menu.icon ? <Icon type={menu?.icon} /> : null}
-            <span>{menu?.title}</span>
-            {menu.path ? <Link to={menu.path} /> : null}
-          </Menu.Item>
+          <>
+            <Menu.Item key={menu.key}>
+              {menu.icon ? <Icon type={menu?.icon} /> : null}
+              <span>{menu?.title}</span>
+              {menu.path ? <Link to={menu.path} /> : null}
+            </Menu.Item>
+          </>
         )
       )}
-    </Menu >
+    </Menu>
   );
 };
 
 const TopNavContent = (props) => {
-  const { user } = useContext(UserContext)
+  const { user } = useContext(UserContext);
   const { topNavColor } = props;
-  const navigationMenu = navigationConfig(user)
+  const navigationMenu = navigationConfig(user);
 
   return (
     <Menu mode="horizontal" style={{ backgroundColor: topNavColor }}>
@@ -126,9 +127,7 @@ const TopNavContent = (props) => {
                 >
                   {subMenuFirst.submenu.map((subMenuSecond) => (
                     <Menu.Item key={subMenuSecond.key}>
-                      <span>
-                        {subMenuSecond.title}
-                      </span>
+                      <span>{subMenuSecond.title}</span>
                       <Link to={subMenuSecond.path} />
                     </Menu.Item>
                   ))}

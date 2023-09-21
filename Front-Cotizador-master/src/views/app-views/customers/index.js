@@ -4,6 +4,7 @@ import {
   EditOutlined,
   DeleteOutlined,
   DownloadOutlined,
+  FilePdfOutlined,
 } from "@ant-design/icons";
 import { APP_PREFIX_PATH, API_BASE_URL } from "configs/AppConfig";
 import axios from "axios";
@@ -35,9 +36,6 @@ const Customers = ({ history }) => {
   const [loading, setLoading] = useState(true);
   const [customers, setCustomers] = useState([]);
   const [allCustomers, setAllCustomers] = useState([]);
-  const [urlPDF, setUrlPDF] = useState("");
-
-  console.log(allCustomers);
 
   useEffect(() => {
     const init = async () => {
@@ -124,7 +122,7 @@ const Customers = ({ history }) => {
       dataIndex: "_id",
       key: "_id",
       render: (_id, record) =>
-      Actions({ _id, deleteCustomer, editCustomer, nit: record.nit }),
+        Actions({ _id, deleteCustomer, editCustomer, nit: record.nit }),
     },
   ];
 
@@ -143,6 +141,10 @@ const Customers = ({ history }) => {
   };
 
   if (loading) return <Loading cover="content" />;
+
+  const redirect = () => {
+    window.location.href = "https://xppublicitarios-mu.vercel.app/guide";
+  };
 
   return (
     <div>
@@ -163,6 +165,9 @@ const Customers = ({ history }) => {
           Crear cliente
         </Button>
         <ExportExcel items={allCustomers} />
+        <Button onClick={() => redirect()} style={{ marginLeft: "4px" }}>
+          <FilePdfOutlined />
+        </Button>
       </div>
       <Table
         onRow={(record, rowIndex) => {
