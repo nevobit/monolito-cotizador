@@ -255,7 +255,7 @@ const pdfGenerator = async (quote, user, setLoading) => {
           doc.text(
             525,
             height2 + 8,
-            `$ ${parseInt(20)
+            `$ ${parseInt(mark.unitPrice)
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
             "right"
