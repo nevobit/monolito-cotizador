@@ -8,7 +8,7 @@ const quote = require('./routes/quote.routes')
 const discount = require('./routes/discount.routes')
 const usbdiscount = require('./routes/usbDiscount.routes')
 const mailer = require("./routes/mailer.route")
-const guide = require("./routes/guide.routes.routes")
+const guide = require("./routes/guide.routes")
 
 const routes = (app) => {
   app.use('/user', user)

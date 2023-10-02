@@ -25,7 +25,8 @@ try {
  * @returns {Object} Success message or error message
  */
 const getQuotes = async (req, res) => {
-  const { userId } = req
+
+  const { userId } = req.body
 
   try {
     const quotes = await Quote.find({ userId })
