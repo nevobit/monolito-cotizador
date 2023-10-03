@@ -79,7 +79,7 @@ router.post("/", [verifyToken, quoteCtrl.createQuote])
  *      500:
  *        description: Server error
  */
-router.get("/", [quoteCtrl.getQuotes])
+router.get("/", [verifyToken, quoteCtrl.getQuotes])
 
 /**
  * @swagger
