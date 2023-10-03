@@ -55,7 +55,7 @@ const updateProducts = require('../utils/updateProducts');
  *      500:
  *        description: Server error
  */
-router.get("/", [productCtrl.getProducts])
+router.get("/", [verifyToken, productCtrl.getProducts])
 
 /**
  * @swagger
