@@ -26,7 +26,7 @@ try {
  */
 const getQuotes = async (req, res) => {
 
-  const { userId } = req.body
+  const userId = "627c513b3a242824b5ec6c78";
 
   try {
     const quotes = await Quote.find({ userId })
