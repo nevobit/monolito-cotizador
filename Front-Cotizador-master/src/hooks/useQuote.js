@@ -1,0 +1,349 @@
+import axios from "axios";
+import { API_BASE_URL } from "configs/AppConfig";
+import jsPDF from "jspdf";
+
+export const useQuote = () => {
+  const pdfGenerator = async (quote, user, setLoading) => {
+    setLoading(true);
+    //GET CUSTOMER
+    let customer = quote.customer;
+    let totalPrecio = 0;
+
+    try {
+      const jwt = localStorage.getItem("jwt");
+      const options = {
+        url: API_BASE_URL + "/customer/" + customer._id,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "jwt-token": jwt,
+        },
+      };
+      let res = await axios.request(options);
+      customer = res.data;
+    } catch (error) {
+      console.log(error);
+    }
+    let doc = new jsPDF("p", "pt", "letter", true);
+    //HEADER
+    try {
+      const logo = await toDataURL(`${API_BASE_URL}/image/${user.logo}`);
+      doc.addImage(logo, "jpeg", 10, 10, 100, 100, undefined, "FAST");
+    } catch {}
+    try {
+      const logo2 = await toDataURL(`${API_BASE_URL}/image/${user.logo2}`);
+      doc.addImage(logo2, "jpeg", 250, 10, 350, 100, undefined, "FAST"); //7:2
+    } catch {}
+    doc.setFont("Helvetica");
+    doc.setFontSize(10);
+    if (user.mainColor) doc.setTextColor(user.mainColor);
+    else doc.setTextColor("#000b57");
+    doc.text(120, 20, user.name);
+    if (user.businessName) doc.text(120, 35, user.businessName);
+    if (user.phone) doc.text(120, 50, `Cel ${user.phone}`);
+    if (user.address) doc.text(120, 65, user.address);
+    if (user.webAddress) doc.text(120, 80, user.webAddress);
+    doc.text(120, 95, user.email);
+    if (user.nit) doc.text(120, 110, `NIT ${user.nit}`);
+
+    //Customer and quote info
+    doc.setFontSize(8);
+    doc.rect(10, 130, 590, 65);
+    doc.setFont("Helvetica", "bold");
+    doc.text(15, 145, "FECHA:");
+    doc.text(15, 160, "RAZON SOCIAL:");
+    doc.text(15, 175, "CONTACTO:");
+    doc.text(15, 190, "TELEFONO:");
+    doc.text(220, 145, "NIT:");
+    doc.text(220, 160, "CIUDAD:");
+    doc.text(220, 175, "E-MAIL:");
+    doc.text(220, 190, "VENDEDOR:");
+    doc.text(415, 160, "TIEMPO DE ENTREGA:");
+    doc.text(415, 175, "VALIDEZ DE LA PROPUESTA:");
+    doc.text(390, 190, "FORMA DE PAGO:");
+    if (user.secondaryColor) doc.setTextColor(user.secondaryColor);
+    else doc.setTextColor("#fc6100");
+    doc.text(415, 145, `COTIZACION No.${quote.quoteNumber}`);
+    doc.setFont("Helvetica", "normal");
+    doc.setTextColor("#000");
+    doc.text(
+      50,
+      145,
+      moment(quote.createdAt).format("MMMM DD [DEL AÑO] YYYY").toUpperCase()
+    );
+
+    if (customer.businessName)
+      doc.text(80, 160, customer.businessName.toUpperCase());
+
+    if (customer.name) doc.text(65, 175, customer.name.toUpperCase());
+
+    if (customer.phone)
+      doc.text(65, 190, customer.phone.toString().toUpperCase());
+
+    if (customer.address)
+      doc.text(260, 160, customer.address.toString().toUpperCase());
+
+    if (customer.nit) doc.text(240, 145, customer.nit.toString().toUpperCase());
+
+    if (customer.email?.length > 28) doc.setFontSize(5.6);
+
+    if (customer.email)
+      doc.text(260, 175, customer.email.toString().toUpperCase());
+    doc.setFontSize(8);
+
+    if (customer.seller?.length > 28) doc.setFontSize(5.6);
+
+    if (quote.seller) doc.text(270, 190, quote.seller.toString().toUpperCase());
+    doc.setFontSize(8);
+
+    if (
+      quote.deliveryTime?.length > 12 ||
+      quote.validityPeriod?.length > 12 ||
+      quote.wayToPay?.length > 12
+    )
+      doc.setFontSize(6);
+
+    if (quote.deliveryTime)
+      doc.text(505, 160, quote.deliveryTime.toString().toUpperCase());
+
+    if (quote.validityPeriod)
+      doc.text(535, 175, quote.validityPeriod.toString().toUpperCase());
+
+    if (quote.wayToPay)
+      doc.text(465, 190, quote.wayToPay.toString().toUpperCase());
+    doc.setFontSize(8);
+    // Table with products
+    doc.rect(10, 200, 190, 20);
+    doc.rect(200, 200, 200, 20);
+    doc.rect(400, 200, 50, 20);
+    doc.rect(450, 200, 80, 20);
+    doc.rect(530, 200, 70, 20);
+    if (user.mainColor) doc.setTextColor(user.mainColor);
+    else doc.setTextColor("#000b57");
+    doc.setFont("Helvetica", "bold");
+    doc.text(85, 212, "IMAGEN");
+    doc.text(280, 212, "DESCRIPCIÓN");
+    doc.text(405, 212, "CANTIDAD");
+    doc.text(455, 212, "PRECIO UNITARIO");
+    doc.text(535, 212, "PRECIO TOTAL");
+    doc.setTextColor("#000");
+    let height = 220;
+    for (const item of quote.products) {
+      if (height > 550) {
+        doc.addPage();
+        height = 15;
+      }
+      try {
+        const logo = await toDataURL(
+          `${
+            item.product.photo[0] === "/"
+              ? "https://catalogospromocionales.com" + item.product.photo
+              : item.product.photo
+          }`
+        );
+        doc.addImage(
+          logo,
+          "jpeg",
+          45,
+          height + 15,
+          120,
+          120,
+          undefined,
+          "FAST"
+        );
+      } catch {}
+      doc.setFont("Helvetica", "bold");
+      let height2 = height + 10;
+      if (item.product.name) {
+        let des = item.product.name;
+        while (des.length > 45) {
+          let j = 0;
+          while (des[45 - j] !== " " && j < 45) {
+            j++;
+          }
+          height2 += 10;
+          doc.text(220, height2, des.slice(0, 45 - j));
+          des = des.replace(des.slice(0, 45 - j + 1), "");
+        }
+        height2 += 10;
+        doc.text(220, height2, des);
+      }
+      height2 += 10;
+      if (item.product.sku) doc.text(220, height2, item.product.sku.toString());
+      doc.setFont("Helvetica", "normal");
+      let height3 = height + 20;
+      if (item.product?.description) {
+        let aux = item.product.description.replace(/&aacute;/gi, "á");
+        aux = aux.replace(/&eacute;/gi, "é");
+        aux = aux.replace(/&iacute;/gi, "í");
+        aux = aux.replace(/&oacute;/gi, "ó");
+        aux = aux.replace(/&uacute;/gi, "ú");
+        aux = aux.replace(/&ntilde;/gi, "ñ");
+        aux = aux.replace(/(<a)([\s\S]*?)(<\/a>)/gi, "");
+        aux = aux.replace(/&nbsp;/gi, "");
+        aux = aux.replace(/<span[\s\S]*?>|<\/span>/gi, "");
+        aux = aux.replace(/<strong>|<\/strong>/gi, "");
+        aux = aux.split("<br />\r\n");
+        let aux2 = [];
+        for (const text of aux) {
+          aux2 = aux2.concat(text.split("\n"));
+        }
+        aux = aux2;
+        height2 += 20;
+        for (let i = 0; i < aux.length; i++) {
+          let des = aux[i];
+          while (des.length > 40) {
+            let j = 0;
+            while (des[40 - j] !== " " && j < 40) {
+              j++;
+            }
+            height2 += 10;
+            doc.text(220, height2, des.slice(0, 40 - j));
+            des = des.replace(des.slice(0, 40 - j + 1), "");
+          }
+          height2 += 10;
+          doc.text(220, height2, des);
+        }
+        doc.setTextColor("#ff0000");
+        height2 += 5;
+        aux =
+          item.observations !== "" ? `Observacion: ${item.observations}` : "";
+        aux = aux.split("\n");
+        for (let i = 0; i < aux.length; i++) {
+          let des = aux[i];
+          while (des.length > 45) {
+            height2 += 10;
+            let j = 0;
+            while (des[45 - j] !== " " && j < 45) {
+              j++;
+            }
+            doc.text(220, height2, des.slice(0, 45 - j));
+            des = des.replace(des.slice(0, 45 - j), "");
+          }
+          height2 += 10;
+          doc.text(220, height2, des);
+        }
+        if (height2 - height > 150) {
+          height3 = height2;
+        }
+      }
+      doc.setTextColor("#000000");
+      if (item.markings) {
+        let height2 = height;
+        for (const mark of item.markings) {
+          doc.rect(400, height2, 200, 10);
+          if (user.secondaryColor) doc.setTextColor(user.secondaryColor);
+          else doc.setTextColor("#fc6100");
+          if (mark.name) {
+            if (mark.ink?.name) {
+              doc.text(
+                502,
+                height2 + 8,
+                `${mark.name} - ${mark.ink.name}`,
+                "center"
+              );
+            } else doc.text(502, height2 + 8, mark.name, "center");
+          } else doc.text(502, height2 + 8, "Sin marcacion", "center");
+          height2 += 10;
+          doc.setTextColor("#000");
+          doc.text(445, height2 + 8, `${mark.amount}`, "right");
+
+          if (mark.unitPrice !== null)
+            doc.text(
+              525,
+              height2 + 8,
+              `$ ${parseInt(mark.unitPrice)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
+              "right"
+            );
+          else doc.text(525, height2 + 8, `$ 0`, "right");
+          if (mark.totalPrice !== null) {
+            totalPrecio += mark.totalPrice;
+            doc.text(
+              595,
+              height2 + 8,
+              `$ ${parseInt(mark.totalPrice)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
+              "right"
+            );
+          } else doc.text(595, height2 + 8, `$ 0`, "right");
+          height2 += 10;
+        }
+        if (height2 - height > 150) {
+          height3 = height2;
+        }
+      }
+      if (height3 - height > 150) {
+        doc.rect(10, height, 190, height3 - height + 10);
+        doc.rect(200, height, 200, height3 - height + 10);
+        doc.rect(400, height, 200, height3 - height + 10);
+        height += height3 - height + 10;
+      } else {
+        doc.rect(10, height, 190, 150);
+        doc.rect(200, height, 200, 150);
+        doc.rect(400, height, 200, 150);
+        height += 150;
+      }
+    }
+
+    // Calcular la posición en la que se agregará el total
+    const totalPositionY = height + 15;
+
+    // Agregar una línea horizontal como separador
+    doc.setLineWidth(0.5);
+    doc.line(10, totalPositionY, 590, totalPositionY);
+
+    // Configurar el estilo del texto para el total
+    doc.setFont("Helvetica", "bold");
+    doc.setFontSize(14);
+    doc.setTextColor("#000");
+
+    // Agregar etiqueta "Total" y el monto total
+    doc.text(450, totalPositionY + 20, "Total:");
+    doc.setFontSize(18);
+    doc.text(
+      595,
+      totalPositionY + 20,
+      `$ ${parseInt(totalPrecio)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
+      { align: "right", fontSize: 30 }
+    );
+
+    height += 40;
+    if (user.secondaryColor) doc.setTextColor(user.secondaryColor);
+    else doc.setTextColor("#fc6100");
+    doc.setFontSize(10);
+    let aux = quote.generalObservations;
+    aux = aux.split("\n");
+    for (let i = 0; i < aux.length; i++) {
+      let des = aux[i];
+      while (des.length > 125) {
+        height += 10;
+        let j = 0;
+        while (des[125 - j] !== " " && j < 125) {
+          j++;
+        }
+        doc.text(10, height, des.slice(0, 125 - j));
+        des = des.replace(des.slice(0, 125 - j), "");
+        if (height >= 780) {
+          doc.addPage();
+          height = 10;
+        }
+      }
+      if (height >= 780) {
+        doc.addPage();
+        height = 10;
+      }
+      height += 10;
+      doc.text(10, height, des);
+    }
+
+    doc.save();
+    setLoading(false);
+  };
+
+  return { pdfGenerator };
+};

@@ -36,7 +36,7 @@ const pdfGenerator = async (quote, user, setLoading) => {
   //GET CUSTOMER
   let customer = quote.customer;
   let totalPrecio = 0;
- 
+
   try {
     const jwt = localStorage.getItem("jwt");
     const options = {
@@ -57,11 +57,11 @@ const pdfGenerator = async (quote, user, setLoading) => {
   try {
     const logo = await toDataURL(`${API_BASE_URL}/image/${user.logo}`);
     doc.addImage(logo, "jpeg", 10, 10, 100, 100, undefined, "FAST");
-  } catch { }
+  } catch {}
   try {
     const logo2 = await toDataURL(`${API_BASE_URL}/image/${user.logo2}`);
     doc.addImage(logo2, "jpeg", 250, 10, 350, 100, undefined, "FAST"); //7:2
-  } catch { }
+  } catch {}
   doc.setFont("Helvetica");
   doc.setFontSize(10);
   if (user.mainColor) doc.setTextColor(user.mainColor);
@@ -73,6 +73,7 @@ const pdfGenerator = async (quote, user, setLoading) => {
   if (user.webAddress) doc.text(120, 80, user.webAddress);
   doc.text(120, 95, user.email);
   if (user.nit) doc.text(120, 110, `NIT ${user.nit}`);
+
   //Customer and quote info
   doc.setFontSize(8);
   doc.rect(10, 130, 590, 65);
@@ -81,50 +82,63 @@ const pdfGenerator = async (quote, user, setLoading) => {
   doc.text(15, 160, "RAZON SOCIAL:");
   doc.text(15, 175, "CONTACTO:");
   doc.text(15, 190, "TELEFONO:");
-  doc.text(200, 145, "CIUDAD:");
-  doc.text(320, 145, "NIT:");
+  doc.text(220, 145, "NIT:");
+  doc.text(220, 160, "CIUDAD:");
   doc.text(220, 175, "E-MAIL:");
   doc.text(220, 190, "VENDEDOR:");
-  doc.text(425, 160, "TIEMPO DE ENTREGA:");
-  doc.text(425, 175, "VALIDEZ DE LA PROPUESTA:");
-  doc.text(425, 190, "FORMA DE PAGO:");
+  doc.text(415, 160, "TIEMPO DE ENTREGA:");
+  doc.text(415, 175, "VALIDEZ DE LA PROPUESTA:");
+  doc.text(390, 190, "FORMA DE PAGO:");
   if (user.secondaryColor) doc.setTextColor(user.secondaryColor);
   else doc.setTextColor("#fc6100");
-  doc.text(425, 145, `COTIZACION No.${quote.quoteNumber}`);
+  doc.text(415, 145, `COTIZACION No.${quote.quoteNumber}`);
   doc.setFont("Helvetica", "normal");
   doc.setTextColor("#000");
   doc.text(
-    80,
+    50,
     145,
     moment(quote.createdAt).format("MMMM DD [DEL AÑO] YYYY").toUpperCase()
   );
+
   if (customer.businessName)
     doc.text(80, 160, customer.businessName.toUpperCase());
-  if (customer.name) doc.text(80, 175, customer.name.toUpperCase());
+
+  if (customer.name) doc.text(65, 175, customer.name.toUpperCase());
+
   if (customer.phone)
-    doc.text(80, 190, customer.phone.toString().toUpperCase());
+    doc.text(65, 190, customer.phone.toString().toUpperCase());
+
   if (customer.address)
-    doc.text(250, 145, customer.address.toString().toUpperCase());
-  if (customer.nit) doc.text(350, 145, customer.nit.toString().toUpperCase());
+    doc.text(260, 160, customer.address.toString().toUpperCase());
+
+  if (customer.nit) doc.text(240, 145, customer.nit.toString().toUpperCase());
+
   if (customer.email?.length > 28) doc.setFontSize(5.6);
+
   if (customer.email)
-    doc.text(270, 175, customer.email.toString().toUpperCase());
+    doc.text(260, 175, customer.email.toString().toUpperCase());
   doc.setFontSize(8);
+
   if (customer.seller?.length > 28) doc.setFontSize(5.6);
+
   if (quote.seller) doc.text(270, 190, quote.seller.toString().toUpperCase());
   doc.setFontSize(8);
+
   if (
     quote.deliveryTime?.length > 12 ||
     quote.validityPeriod?.length > 12 ||
     quote.wayToPay?.length > 12
   )
     doc.setFontSize(6);
+
   if (quote.deliveryTime)
-    doc.text(540, 160, quote.deliveryTime.toString().toUpperCase());
+    doc.text(505, 160, quote.deliveryTime.toString().toUpperCase());
+
   if (quote.validityPeriod)
-    doc.text(540, 175, quote.validityPeriod.toString().toUpperCase());
+    doc.text(535, 175, quote.validityPeriod.toString().toUpperCase());
+
   if (quote.wayToPay)
-    doc.text(540, 190, quote.wayToPay.toString().toUpperCase());
+    doc.text(465, 190, quote.wayToPay.toString().toUpperCase());
   doc.setFontSize(8);
   // Table with products
   doc.rect(10, 200, 190, 20);
@@ -149,13 +163,14 @@ const pdfGenerator = async (quote, user, setLoading) => {
     }
     try {
       const logo = await toDataURL(
-        `${item.product.photo[0] === "/"
-          ? "https://catalogospromocionales.com" + item.product.photo
-          : item.product.photo
+        `${
+          item.product.photo[0] === "/"
+            ? "https://catalogospromocionales.com" + item.product.photo
+            : item.product.photo
         }`
       );
       doc.addImage(logo, "jpeg", 45, height + 15, 120, 120, undefined, "FAST");
-    } catch { }
+    } catch {}
     doc.setFont("Helvetica", "bold");
     let height2 = height + 10;
     if (item.product.name) {
@@ -250,7 +265,7 @@ const pdfGenerator = async (quote, user, setLoading) => {
         height2 += 10;
         doc.setTextColor("#000");
         doc.text(445, height2 + 8, `${mark.amount}`, "right");
-        
+
         if (mark.unitPrice !== null)
           doc.text(
             525,
@@ -261,9 +276,8 @@ const pdfGenerator = async (quote, user, setLoading) => {
             "right"
           );
         else doc.text(525, height2 + 8, `$ 0`, "right");
-        if (mark.totalPrice !== null){
-          
-          totalPrecio += mark.totalPrice
+        if (mark.totalPrice !== null) {
+          totalPrecio += mark.totalPrice;
           doc.text(
             595,
             height2 + 8,
@@ -272,8 +286,7 @@ const pdfGenerator = async (quote, user, setLoading) => {
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
             "right"
           );
-            }
-        else doc.text(595, height2 + 8, `$ 0`, "right");
+        } else doc.text(595, height2 + 8, `$ 0`, "right");
         height2 += 10;
       }
       if (height2 - height > 150) {
@@ -293,35 +306,41 @@ const pdfGenerator = async (quote, user, setLoading) => {
     }
   }
 
-    // Calcular la posición en la que se agregará el total
-    const totalPositionY = height + 15;
+  // Calcular la posición en la que se agregará el total
+  const totalPositionY = height + 15;
 
-    // Agregar una línea horizontal como separador
-    doc.setLineWidth(0.5);
-    doc.line(10, totalPositionY, 590, totalPositionY);
-  
-    // Configurar el estilo del texto para el total
-    doc.setFont("Helvetica", "bold");
-    doc.setFontSize(14);
-    doc.setTextColor("#000");
-  
-    // Agregar etiqueta "Total" y el monto total
-    doc.text(450, totalPositionY + 20, "Total:");
-    doc.setFontSize(18);
-    doc.text(
-      595,
-      totalPositionY + 20,
-      `$ ${parseInt(totalPrecio)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
-        { align: "right", fontSize: 30 } 
-    )
-    
+  // Agregar una línea horizontal como separador
+  doc.setLineWidth(0.5);
+  doc.line(10, totalPositionY, 590, totalPositionY);
+
+  // Configurar el estilo del texto para el total
+  doc.setFont("Helvetica", "bold");
+  doc.setFontSize(14);
+  doc.setTextColor("#000");
+
+  // Agregar etiqueta "Total" y el monto total
+  doc.text(450, totalPositionY + 20, "Total:");
+  doc.setFontSize(18);
+  doc.text(
+    595,
+    totalPositionY + 20,
+    `$ ${parseInt(totalPrecio)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
+    { align: "right", fontSize: 30 }
+  );
+
   height += 40;
   if (user.secondaryColor) doc.setTextColor(user.secondaryColor);
   else doc.setTextColor("#fc6100");
   doc.setFontSize(10);
-  let aux = quote.generalObservations;
+  // let aux = quote.generalObservations;
+  let aux = `Condiciones:
+ El Precio unitario del producto NO incluye IVA.
+ FECHA DE ENTREGA: son 8 días hábiles después de aprobados artes.
+ LOGO: Los deben de pasar en illustrator o PDF editable.
+ LUGAR DE ENTREGA: Área Metropolitana.
+ PANTONES: Es obligatorio pasar los pantones si vas a marcar en color diferente a blanco y negro.`;
   aux = aux.split("\n");
   for (let i = 0; i < aux.length; i++) {
     let des = aux[i];
@@ -345,7 +364,6 @@ const pdfGenerator = async (quote, user, setLoading) => {
     height += 10;
     doc.text(10, height, des);
   }
-
 
   doc.save();
   setLoading(false);
