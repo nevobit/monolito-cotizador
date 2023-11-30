@@ -266,16 +266,16 @@ const pdfGenerator = async (quote, user, setLoading) => {
         doc.setTextColor("#000");
         doc.text(445, height2 + 8, `${mark.amount}`, "right");
 
-        if (mark.unitPrice !== null)
-          doc.text(
-            525,
-            height2 + 8,
-            `$ ${parseInt(mark.unitPrice)
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`,
-            "right"
-          );
-        else doc.text(525, height2 + 8, `$ 0`, "right");
+        if (mark.unitPrice !== null) {
+          const formattedPrice =
+            mark.unitPrice !== null
+              ? `$${Number(mark.unitPrice)
+                  .toFixed(2)
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+              : `$0`;
+
+          doc.text(525, height2 + 8, formattedPrice, "right");
+        } else doc.text(525, height2 + 8, `$ 0`, "right");
         if (mark.totalPrice !== null) {
           totalPrecio += mark.totalPrice;
           doc.text(

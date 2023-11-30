@@ -311,9 +311,11 @@ const AddQuote = ({ history }) => {
       let unitPrice = price / realUtility + freightValue + markingValue;
       let totalPrice = unitPrice * amount;
 
-      product.markings[j].unitPrice = unitPrice;
+      // product.markings[j].unitPrice = unitPrice;
+      product.markings[j].unitPrice = unitPrice.toFixed(2);
       product.markings[j].totalProfit = totalProfitValue;
-      product.markings[j].totalPrice = totalPrice;
+      product.markings[j].totalPrice = totalPrice.toFixed(2);
+      // product.markings[j].totalPrice = totalPrice;
       /*
       product.markings[j].unitPrice = parseInt(
         mark.netPrice /
@@ -1066,9 +1068,16 @@ const AddQuote = ({ history }) => {
                                 <Input
                                   prefix="$"
                                   name="unitPrice"
-                                  value={Number.parseInt(m.unitPrice)
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                  value={
+                                    isNaN(m.unitPrice)
+                                      ? ""
+                                      : `$${Number(m.unitPrice)
+                                          .toFixed(2)
+                                          .replace(
+                                            /\B(?=(\d{3})+(?!\d))/g,
+                                            ","
+                                          )}`
+                                  }
                                   placeholder="Precio unitario"
                                   style={{ width: 100 }}
                                   onChange={(v) => onChangeHandlerMark(v, i, j)}
